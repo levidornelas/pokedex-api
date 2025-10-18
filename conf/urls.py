@@ -18,7 +18,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('ceo-kogui/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('api/', include('apps.api.urls')),
 
     # Swagger

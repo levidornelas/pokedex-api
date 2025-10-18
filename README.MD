@@ -86,9 +86,8 @@ docker exec -it django_api bash
 
 ---
 
-### 📄 Admin / Gestão de Usuários
+### Swagger: 
 
-- `python manage.py createsuperuser` para criar usuário admin.
-- Painel administrativo disponível em `/admin/` para:
+Acesse: 
 
----
+localhost:8000/swagger para 
