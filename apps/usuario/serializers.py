@@ -60,47 +60,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(
-        required=True,
-        style={'input_type': 'password'},
-        label='Senha atual'
-    )
-    new_password = serializers.CharField(
-        required=True,
-        validators=[validate_password],
-        style={'input_type': 'password'},
-        label='Nova senha'
-    )
-    new_password2 = serializers.CharField(
-        required=True,
-        style={'input_type': 'password'},
-        label='Confirmar nova senha'
-    )
-
-    def validate(self, attrs):
-        if attrs['new_password'] != attrs['new_password2']:
-            raise serializers.ValidationError({
-                "new_password": "As senhas não coincidem."
-            })
-        return attrs
-
-
-class UpdateProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('nome', 'email')
-        extra_kwargs = {
-            'email': {'required': False}
-        }
-
-    def validate_email(self, value):
-        user = self.context['request'].user
-        if User.objects.filter(email=value).exclude(id_usuario=user.id_usuario).exists():
-            raise serializers.ValidationError("Este email já está em uso.")
-        return value
-
-
 class LoginSerializer(serializers.Serializer):
     login = serializers.CharField(required=True)
     password = serializers.CharField(

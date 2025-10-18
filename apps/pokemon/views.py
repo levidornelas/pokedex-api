@@ -21,7 +21,7 @@ class TipoPokemonViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PokemonUsuarioViewSet(viewsets.ModelViewSet):
     serializer_class = PokemonUsuarioSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     def get_queryset(self):
         return PokemonUsuario.objects.filter(

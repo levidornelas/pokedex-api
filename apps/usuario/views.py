@@ -7,13 +7,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .serializers import UserSerializer, RegisterSerializer, UpdateProfileSerializer
+from .serializers import UserSerializer, RegisterSerializer
 
 User = get_user_model()
 
 
 class RegisterView(generics.CreateAPIView):
-    """View para registro de novo usuário"""
 
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -43,7 +42,6 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LogoutView(APIView):
-    """View para logout (blacklist do refresh token)"""
 
     permission_classes = [IsAuthenticated]
 
@@ -69,33 +67,6 @@ class LogoutView(APIView):
             )
 
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    """View para visualizar e atualizar perfil do usuário"""
-
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def get_object(self):
-        return self.request.user
-
-    def update(self, request, *args, **kwargs):
-        serializer = UpdateProfileSerializer(
-            self.get_object(), data=request.data, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(
-            {
-                "user": UserSerializer(self.get_object()).data,
-                "message": "Perfil atualizado com sucesso!",
-            }
-        )
-
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -113,3 +84,50 @@ class AdminUserListView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['nome', 'login', 'email']
     ordering_fields = ['dt_inclusao', 'nome']
+
+
+class AdminUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user == request.user:
+            return Response(
+                {"error": "Você não pode deletar sua própria conta."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return super().destroy(request, *args, **kwargs)
+
+
+class AdminPasswordResetView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, user_id):
+        try:
+            user = User.objects.get(id_usuario=user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "Usuário não encontrado."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        new_password = request.data.get('new_password')
+
+        if not new_password:
+            return Response(
+                {"error": "Nova senha é obrigatória."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {
+                "message": f"Senha do usuário {user.nome} resetada com sucesso!",
+                "user_id": user.id_usuario
+            },
+            status=status.HTTP_200_OK
+        )
