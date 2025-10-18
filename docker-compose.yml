@@ -1,0 +1,13 @@
+services:
+  api:
+    build: .
+    container_name: django_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-change-in-production
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+    restart: unless-stopped
