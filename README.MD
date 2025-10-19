@@ -3,7 +3,7 @@
 ### 📘 Descrição
 
 Este repositório contém o **Back-End da Pokédex**, desenvolvido em **Python com Django**.
-Ele centraliza a integração com a **PokeAPI**, fornece endpoints para o **Front-End Angular** e implementa **autenticação JWT**, além de funcionalidades administrativas.
+Ele centraliza a integração com a **PokeAPI**, fornece endpoints para o **Front-End Angular** e implementa **autenticação JWT**
 
 ---
 
@@ -14,24 +14,12 @@ Ele centraliza a integração com a **PokeAPI**, fornece endpoints para o **Fron
 - ✅ **Autenticação com Token JWT (access e refresh)**.
 - ✅ **Painel de administração** para gestão de usuários.
 - ✅ **Rota para reset de senha via painel administrativo.**
-- ✅ **Containerização completa via Docker**.
+- ✅ **Containerização completa via Docker.**
 - ✅ **Centralização de todas as requisições à PokeAPI no Back-End** — o Front-End consome apenas esta API interna.
 
 ---
 
-### 🧱 Tecnologias Utilizadas
-
-- **Python 3.12+**
-- **Django 5+**
-- **Django REST Framework**
-- **djangorestframework-simplejwt**
-- **SQLite (padrão do Django)**
-- **Requests (para integração com PokeAPI)**
-- **Docker / Docker Compose**
-
----
-
-### ⚙️ Estrutura do Projeto
+### 🧱 Estrutura do Projeto
 
 ```
 back-end/
@@ -49,45 +37,47 @@ back-end/
 
 ---
 
-Toda comunicação com a PokeAPI é feita pelo servidor Django.
-O Front-End consome endpoints internos.
+### 🧩 Integração com a PokeAPI
 
-🔗 **Documentação da PokeAPI:**
+Toda comunicação com a **PokeAPI** é feita **exclusivamente pelo servidor Django**.
+O **Front-End Angular** consome apenas os **endpoints internos** deste back-end.
+
+🔗 **Documentação oficial da PokeAPI:**
 [https://pokeapi.co/docs/v2](https://pokeapi.co/docs/v2)
 
 ---
 
 ### 🔐 Autenticação JWT
 
-Utiliza `djangorestframework-simplejwt` com os seguintes endpoints:
+A autenticação utiliza o pacote **`djangorestframework-simplejwt`**
 
-```
-POST /api/auth/register/     → Registro de novo usuário
-POST /api/auth/login/        → Login e geração de tokens
-POST /api/auth/token/refresh/      → Atualização de token
-```
+📦 **Detalhes:**
 
-- Tokens armazenados no Front-End via **localStorage**.
-- Todas as rotas protegidas requerem **Authorization: Bearer <token>**.
+- Tokens são armazenados no **localStorage** no Front-End.
+- Todas as rotas protegidas requerem o cabeçalho:
+  `Authorization: Bearer <token>`.
 
 ---
 
-### 🐳 Docker
+### Tutorial — Executando a Aplicação com Docker
 
-O Back-End já vem containerizado. Exemplo:
+Siga o passo a passo abaixo para rodar o projeto localmente usando Docker:
+
+#### Clonar o repositório
 
 ```bash
-# Build e inicializa o container
-docker-compose up --build
-
-# Acessar o container
-docker exec -it django_api bash
+git clone https://github.com/seuusuario/pokedex-backend.git
+cd pokedex-backend
 ```
 
----
+#### Criar e configurar o container
 
-### Swagger: 
+```bash
+docker-compose up --build
 
-Acesse: 
+#### Acessar a aplicação
 
-localhost:8000/swagger para 
+- 🌍 API: [http://localhost:8000/api/](http://localhost:8000/api/)
+- ⚙️ Admin: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+- 📘 Swagger: [http://localhost:8000/swagger/](http://localhost:8000/swagger/)
+```
