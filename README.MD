@@ -9,7 +9,7 @@ Ele centraliza a integração com a **PokeAPI**, fornece endpoints para o **Fron
 
 ### 🚀 Funcionalidades
 
-- ✅ **Integração direta com a PokeAPI** (consulta e cache local de Pokémons).
+- ✅ **Integração direta com a PokeAPI**.
 - ✅ **Banco de dados SQLite** com **ORM do Django**.
 - ✅ **Autenticação com Token JWT (access e refresh)**.
 - ✅ **Painel de administração** para gestão de usuários.
